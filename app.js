@@ -1,3 +1,5 @@
+
+
 // ord listan
 const wordList = [
   {
@@ -225,16 +227,22 @@ const wordList = [
 ];
 
 
-//variabler
+//variabler till Spelet
 const wordDisplay = document.querySelector(
   ".gameContainer__guessContainer__guessLetter ul"
 );
 const guessesText = document.querySelector(
   ".gameContainer__guessContainer__incorrectGuess p b"
 );
+const hintText = document.querySelector(
+  ".gameContainer__guessContainer__hint h3"
+);
 const keyboardDiv = document.querySelector(
   ".gameContainer__guessContainer__buttons"
 );
+
+
+//Variabler till Message Box
 const messageDiv = document.querySelector(".message");
 const messageDivInfoResult = document.querySelector(
   ".message .message__info h1"
@@ -243,26 +251,25 @@ const messageDivInfoCorrectWord = document.querySelector(
   ".message .message__info p"
 );
 const messageButton = document.querySelector("#reset");
+
+//Variabler till valda ordet och fel räknare
 let currentWord = "";
 let wrongGuessCount = 0;
 const maxGuesses = 5;
+
+//Variable for Hänga gubben bild
 const paths = ["head", "body", "arms", "legs", "scaffold"].reverse();
 
 
-// Välja ett random ord från wordList
+// Välja ett random ord från ord listan
 const getRandomWord = () => {
   const { word, hint } = wordList[Math.floor(Math.random() * wordList.length)];
-  // console.log(word, hint);
+  console.log(word, hint);
   currentWord = word;
-  const hintText = document.querySelector(
-    ".gameContainer__guessContainer__hint h3"
-  );
   hintText.innerText = `Hint : ${hint}`;
-  wordDisplay.innerHTML = word
-    .split("")
-    .map(() => `<li class ='letter'></li>`)
-    .join("");
+  wordDisplay.innerHTML = word.split("").map(() => `<li class ='letter'></li>`).join("");
 };
+
 getRandomWord();
 
 
@@ -274,20 +281,20 @@ for (let i = 97; i <= 122; i++) {
   keyboardDiv.appendChild(button);
   button.addEventListener("click", (e) =>
     initGame(e.target, String.fromCharCode(i))
+    // console.log(e.target)
   );
 }
-
-
 
 //spelet
 const initGame = (button, clickedLetter) => {
   // console.log(button , clickedLetter);
   if (currentWord.includes(clickedLetter)) {
-    // console.log('Finnas i ordet');
+
     [...currentWord].forEach((letter, index) => {
+     
       if (letter === clickedLetter) {
         wordDisplay.querySelectorAll("li")[index].innerText = letter;
-      } if ([...wordDisplay.querySelectorAll("li")].every( (li) => li.innerText !== "" )) {
+      } else if ([...wordDisplay.querySelectorAll("li")].every( (li) => li.innerText !== "" )) {
         messageDiv.style.display = "block";
         messageDivInfoResult.innerText = `Du vann`;
         messageDivInfoCorrectWord.innerText = `Du gissade ordet:  ${currentWord}`;
@@ -295,17 +302,16 @@ const initGame = (button, clickedLetter) => {
       }
     });
   } else {
-    // console.log('Finns ej i ordet');
+    
     wrongGuessCount++;
     guessesText.innerText = `${wrongGuessCount} / ${maxGuesses}`;
 
     if (wrongGuessCount < maxGuesses) {
       const pathToShow = document.getElementById(paths[wrongGuessCount - 1]);
-      if (pathToShow) {
         pathToShow.style.display = "block";
-      }
+      
     }
-    if (wrongGuessCount == maxGuesses) {
+    else if (wrongGuessCount == maxGuesses) {
       messageDiv.style.display = "block";
       messageDivInfoResult.innerText = `Du förlorade`;
       messageDivInfoCorrectWord.innerText = `Den rätta ordet var:  ${currentWord}`;
@@ -323,9 +329,7 @@ document.addEventListener("keydown", (e) => {
         wordDisplay.querySelectorAll("li")[index].innerText = letter;
       }
       if (
-        [...wordDisplay.querySelectorAll("li")].every(
-          (li) => li.innerText !== ""
-        )
+        [...wordDisplay.querySelectorAll("li")].every( (li) => li.innerText !== "" )
       ) {
         messageDiv.style.display = "block";
         messageDivInfoResult.innerText = `Du vann`;
@@ -356,7 +360,7 @@ document.addEventListener("keydown", (e) => {
 
 //börja om
 const resetGame = () => {
-  messageButton.addEventListener("click", () => {
+    messageButton.addEventListener("click", () => {
     messageDiv.style.display = "none";
     currentWord = "";
     wrongGuessCount = 0;
