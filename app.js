@@ -294,7 +294,7 @@ const initGame = (button, clickedLetter) => {
      
       if (letter === clickedLetter) {
         wordDisplay.querySelectorAll("li")[index].innerText = letter;
-      } else if ([...wordDisplay.querySelectorAll("li")].every( (li) => li.innerText !== "" )) {
+      }  if ([...wordDisplay.querySelectorAll("li")].every( (li) => li.innerText !== "" )) {
         messageDiv.style.display = "block";
         messageDivInfoResult.innerText = `Du vann`;
         messageDivInfoCorrectWord.innerText = `Du gissade ordet:  ${currentWord}`;
